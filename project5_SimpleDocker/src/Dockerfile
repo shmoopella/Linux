@@ -1,0 +1,11 @@
+FROM nginx
+WORKDIR /etc/nginx
+COPY ./nginx/nginx.conf .
+COPY ./docker-entrypoint.sh /
+ENTRYPOINT /docker-entrypoint.sh "nginx" "-g" "daemon off;"
+RUN apt -y update && apt -y upgrade && apt -y install gcc && apt -y install spawn-fcgi && apt -y install libfcgi-dev && rm -rf /var/lib/apt/lists
+WORKDIR /etc
+COPY ./server/hello.c .
+RUN gcc -Wall -Werror -Wextra hello.c -lfcgi
+USER nginx
+EXPOSE 81

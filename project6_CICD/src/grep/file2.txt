@@ -1,0 +1,9 @@
+grepgbb
+hi
+12432432
+lkfhfg
+Hello, my name is Hasan.
+THis is test file for grep project.
+I think Emilia wrote her grep for 98%.
+good bye.
+

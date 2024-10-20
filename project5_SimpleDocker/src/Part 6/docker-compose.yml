@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  hello:
+    build: hello/
+  proxy: 
+    build: proxy/
+    ports: 
+      - 80:8080

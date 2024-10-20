@@ -1,0 +1,5 @@
+Hi my name is Emilia. I am twenty six year old.
+I live in Kazan now.
+i am tired to write this file. It's a test file for grep.
+Hasan blablabla
+bye!

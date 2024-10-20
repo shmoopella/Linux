@@ -1,0 +1,73 @@
+stages:
+  - build
+  - style
+  - test
+  - deploy
+  - notification
+variables:
+  RES: "failure"
+
+build-job:
+  tags:
+    - basic
+  stage: build
+  script:
+    - cd src/cat
+    - make s21_cat
+    - cd ../grep
+    - make s21_grep
+  artifacts:
+    paths:
+      - src/cat/s21_cat
+      - src/grep/s21_grep
+    expire_in: 30 days
+
+style-job:
+  tags:
+    - basic
+  stage: style
+  script:
+    - cd src
+    - clang-format -Werror -n cat/s21_cat.c
+    - clang-format -Werror -n grep/s21_grep.c
+
+test-job:
+  tags:
+    - basic
+  stage: test
+  script:
+    - cd src/cat
+    - ./test.sh
+    - cd ../grep
+    - ./test.sh
+
+deploy-job:
+  tags:
+    - basic
+  stage: deploy
+  when: manual
+  script:
+    - ./deploy.sh
+  allow_failure: false
+
+notification_success-job:
+  variables:
+    TELEGRAM_BOT_TOKEN: "5329922099:AAH6MpneOxaLbaUnFT0qx5rzLlhnLXWARlQ"
+    TELEGRAM_USER_ID: "-1001335562451"
+  tags:
+    - basic
+  stage: notification
+  script:
+    - ./notification.sh success
+  when: on_success
+
+notification_failure-job:
+  variables:
+    TELEGRAM_BOT_TOKEN: "5329922099:AAH6MpneOxaLbaUnFT0qx5rzLlhnLXWARlQ"
+    TELEGRAM_USER_ID: "-1001335562451"
+  tags:
+    - basic
+  stage: notification
+  script:
+    - ./notification.sh failure
+  when: on_failure
